@@ -55,10 +55,22 @@
       <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
       <h1 class="page-title" id="pageTitle">Dashboard</h1>
       <div class="topbar-right">
+        <div class="price-status" id="priceStatus">
+          <span class="price-status-dot" id="priceStatusDot"></span>
+          <span class="price-status-text" id="priceStatusText">Conectando...</span>
+          <button class="refresh-btn" id="refreshBtn" title="Actualizar precios" onclick="manualRefresh()">↻</button>
+        </div>
         <span class="date-badge" id="currentDate"></span>
         <div class="notification-btn">🔔</div>
       </div>
     </header>
+
+    <!-- MARKET STATUS BANNER -->
+    <div class="market-banner" id="marketBanner">
+      <span id="marketStatusIcon">⏳</span>
+      <span id="marketStatusText">Verificando estado del mercado...</span>
+      <span class="market-next" id="marketNext"></span>
+    </div>
 
     <!-- ======================== SECTION: DASHBOARD ======================== -->
     <section id="dashboard" class="section active">
@@ -726,6 +738,7 @@
 
   </main>
 
+  <script src="prices.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

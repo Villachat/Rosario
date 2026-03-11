@@ -179,25 +179,7 @@ function saveNotes() {
   setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
 }
 
-function renderDashboardHoldings() {
-  const list = document.querySelector('.holdings-list');
-  if (!list) return;
-  const logos = { GOOGL: 'googl', AAPL: 'aapl', NVDA: 'nvda', TSLA: 'tsla' };
-  const letters = { GOOGL: 'G', AAPL: 'A', NVDA: 'N', TSLA: 'T' };
-  list.innerHTML = state.portfolio.map(s => `
-    <div class="holding-item">
-      <div class="holding-logo ${logos[s.ticker] || ''}">${letters[s.ticker] || s.ticker[0]}</div>
-      <div class="holding-info">
-        <span class="holding-name">${s.company}</span>
-        <span class="holding-ticker">${s.ticker}</span>
-      </div>
-      <div class="holding-values">
-        <span class="holding-price">$${s.currentPrice.toFixed(2)}</span>
-        <span class="holding-change positive">+$${s.change.toFixed(2)} (${s.changePct.toFixed(2)}%)</span>
-      </div>
-    </div>
-  `).join('');
-}
+
 
 // ========================================================
 // VEST ANALYSIS SCORING
@@ -1035,21 +1017,193 @@ function closeEduModal() {
 }
 
 // ========================================================
+// REAL-TIME PRICES INTEGRATION
+// ========================================================
+
+// Track previous prices to animate flash on change
+const prevPrices = {};
+
+function applyLivePrices(updates) {
+  state.portfolio.forEach(stock => {
+    const data = updates[stock.ticker];
+    if (!data) return;
+
+    const prev = prevPrices[stock.ticker];
+    const direction = prev !== undefined
+      ? (data.price > prev ? 'up' : data.price < prev ? 'down' : 'neutral')
+      : 'neutral';
+
+    prevPrices[stock.ticker] = data.price;
+    stock.currentPrice = data.price;
+    stock.change = data.change;
+    stock.changePct = data.changePct;
+  });
+
+  renderPortfolioTable();
+  renderDashboardHoldings(updates);
+  updateTotalPortfolioValue();
+  animatePriceFlash(updates);
+}
+
+function animatePriceFlash(updates) {
+  // Flash holding rows in dashboard
+  Object.keys(updates).forEach(ticker => {
+    const data = updates[ticker];
+    const prev = prevPrices[ticker];
+
+    // Find all elements showing this ticker's price
+    document.querySelectorAll(`[data-ticker="${ticker}"]`).forEach(el => {
+      el.classList.remove('price-flash-up', 'price-flash-down', 'price-flash-neutral');
+      void el.offsetWidth; // force reflow to restart animation
+      if (prev === undefined || data.price === prev) {
+        el.classList.add('price-flash-neutral');
+      } else {
+        el.classList.add(data.price > prev ? 'price-flash-up' : 'price-flash-down');
+      }
+    });
+  });
+}
+
+function updateTotalPortfolioValue() {
+  const total = state.portfolio.reduce((sum, s) => {
+    const value = s.currentPrice * (s.shares || 1);
+    return sum + value;
+  }, 0);
+
+  const todayChange = state.portfolio.reduce((sum, s) => {
+    return sum + (s.change * (s.shares || 1));
+  }, 0);
+
+  const todayChangePct = (todayChange / (total - todayChange)) * 100;
+
+  const el = document.getElementById('totalPortfolioValue');
+  if (el) el.textContent = `$${total.toFixed(2)}`;
+
+  const statCard = document.querySelector('.stat-card.positive .stat-change');
+  if (statCard) {
+    const sign = todayChange >= 0 ? '+' : '';
+    statCard.textContent = `${sign}$${todayChange.toFixed(2)} hoy (${sign}${todayChangePct.toFixed(2)}%)`;
+    statCard.className = `stat-change ${todayChange >= 0 ? 'positive' : 'negative'}`;
+  }
+}
+
+function updatePriceStatus(status, data) {
+  const dot = document.getElementById('priceStatusDot');
+  const text = document.getElementById('priceStatusText');
+  const btn = document.getElementById('refreshBtn');
+
+  if (!dot || !text) return;
+
+  if (status === 'loading') {
+    dot.className = 'price-status-dot loading';
+    text.textContent = 'Actualizando...';
+    btn?.classList.add('spinning');
+  } else if (status === 'success') {
+    dot.className = 'price-status-dot live';
+    const time = data ? data.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '';
+    text.textContent = `Actualizado ${time}`;
+    btn?.classList.remove('spinning');
+  } else if (status === 'error') {
+    dot.className = 'price-status-dot error';
+    text.textContent = data > 2 ? 'Sin conexión — datos estáticos' : 'Reintentando...';
+    btn?.classList.remove('spinning');
+  }
+}
+
+function updateMarketBanner() {
+  const banner = document.getElementById('marketBanner');
+  const icon = document.getElementById('marketStatusIcon');
+  const statusText = document.getElementById('marketStatusText');
+  const next = document.getElementById('marketNext');
+
+  if (!banner) return;
+
+  const open = PRICES.isMarketOpen();
+  const interval = PRICES.getRefreshInterval();
+
+  banner.className = `market-banner ${open ? 'open' : 'closed'}`;
+  icon.textContent = open ? '🟢' : '🔴';
+  statusText.textContent = open
+    ? 'NYSE/NASDAQ abierto — precios en tiempo real'
+    : 'Mercado cerrado — último precio de cierre';
+  next.textContent = `Actualización cada ${open ? '60s' : '5min'}`;
+}
+
+function renderDashboardHoldings(updates) {
+  const list = document.querySelector('.holdings-list');
+  if (!list) return;
+
+  const logoClass = { GOOGL: 'googl', AAPL: 'aapl', NVDA: 'nvda', TSLA: 'tsla' };
+  const letter = { GOOGL: 'G', AAPL: 'A', NVDA: 'N', TSLA: 'T' };
+
+  list.innerHTML = state.portfolio.map(s => {
+    const isLive = updates && updates[s.ticker];
+    const sign = s.change >= 0 ? '+' : '';
+    return `
+      <div class="holding-item" data-ticker="${s.ticker}">
+        <div class="holding-logo ${logoClass[s.ticker] || ''}">${letter[s.ticker] || s.ticker[0]}</div>
+        <div class="holding-info">
+          <span class="holding-name">${s.company}</span>
+          <span class="holding-ticker">
+            ${s.ticker}
+            ${isLive ? '<span class="live-badge live">LIVE</span>' : ''}
+          </span>
+        </div>
+        <div class="holding-values">
+          <span class="holding-price" data-ticker="${s.ticker}">$${s.currentPrice.toFixed(2)}</span>
+          <span class="holding-change ${s.change >= 0 ? 'positive' : 'negative'}">
+            ${sign}$${s.change.toFixed(2)} (${sign}${s.changePct.toFixed(2)}%)
+          </span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function manualRefresh() {
+  const tickers = state.portfolio.map(s => s.ticker);
+  updatePriceStatus('loading');
+  PRICES.forceRefresh(tickers).then(updates => {
+    if (updates && Object.keys(updates).length > 0) {
+      applyLivePrices(updates);
+      updatePriceStatus('success', new Date());
+    } else {
+      updatePriceStatus('error', 1);
+    }
+  });
+}
+
+// ========================================================
 // INIT
 // ========================================================
 function init() {
   renderPortfolioTable();
   renderDashboardHoldings();
+  updateMarketBanner();
 
   // Load saved notes
   const saved = localStorage.getItem('portfolioNotes');
   if (saved) document.getElementById('portfolioNotes').value = saved;
 
-  // Set default calc values and trigger
+  // Set default calc values
   document.getElementById('ci-principal').value = '1000';
   document.getElementById('ci-monthly').value = '100';
   document.getElementById('ci-rate').value = '10';
   document.getElementById('ci-years').value = '10';
+
+  // Start live prices
+  const tickers = state.portfolio.map(s => s.ticker);
+  PRICES.start(
+    tickers,
+    (updates) => {
+      applyLivePrices(updates);
+      updateMarketBanner();
+    },
+    (status, data) => updatePriceStatus(status, data)
+  );
+
+  // Update market banner every minute regardless
+  setInterval(updateMarketBanner, 60_000);
 }
 
 init();

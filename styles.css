@@ -1368,6 +1368,161 @@ body {
 }
 
 /* ====================================
+   LIVE PRICE STATUS BAR
+==================================== */
+.price-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px 4px 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.price-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+  transition: background 0.4s;
+}
+
+.price-status-dot.live {
+  background: var(--green);
+  animation: pulseDot 2s infinite;
+}
+
+.price-status-dot.loading {
+  background: var(--yellow);
+  animation: pulseDot 0.8s infinite;
+}
+
+.price-status-dot.error { background: var(--red); }
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+
+.refresh-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.refresh-btn:hover { color: var(--accent); }
+.refresh-btn.spinning { animation: spinBtn 0.8s linear infinite; }
+
+@keyframes spinBtn { to { transform: rotate(360deg); } }
+
+/* ====================================
+   MARKET STATUS BANNER
+==================================== */
+.market-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.market-banner.open {
+  background: rgba(76, 222, 135, 0.06);
+  border-bottom-color: rgba(76, 222, 135, 0.2);
+}
+
+.market-banner.closed {
+  background: rgba(90, 99, 122, 0.08);
+}
+
+.market-next {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ====================================
+   PRICE CHANGE FLASH ANIMATION
+==================================== */
+@keyframes flashGreen {
+  0% { background: rgba(76,222,135,0); }
+  25% { background: rgba(76,222,135,0.25); }
+  100% { background: rgba(76,222,135,0); }
+}
+
+@keyframes flashRed {
+  0% { background: rgba(255,95,115,0); }
+  25% { background: rgba(255,95,115,0.25); }
+  100% { background: rgba(255,95,115,0); }
+}
+
+@keyframes flashNeutral {
+  0% { background: rgba(124,106,247,0); }
+  25% { background: rgba(124,106,247,0.2); }
+  100% { background: rgba(124,106,247,0); }
+}
+
+.price-flash-up { animation: flashGreen 1.2s ease-out; }
+.price-flash-down { animation: flashRed 1.2s ease-out; }
+.price-flash-neutral { animation: flashNeutral 1s ease-out; }
+
+/* Skeleton loader for prices */
+.price-skeleton {
+  display: inline-block;
+  width: 60px;
+  height: 14px;
+  background: linear-gradient(90deg, var(--border) 25%, var(--border-light) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: skeleton 1.5s infinite;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+@keyframes skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ====================================
+   LIVE PRICE in holdings list
+==================================== */
+.live-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.live-badge.live { background: var(--green-bg); color: var(--green); }
+.live-badge.stale { background: var(--yellow-bg); color: var(--yellow); }
+
+/* Last updated footer */
+.last-updated {
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 8px 0 0;
+}
+
+/* ====================================
    OVERLAY (mobile sidebar)
 ==================================== */
 .overlay {
