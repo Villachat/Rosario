@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Copiloto Financiero</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">📈</span>
+        <span class="logo-text">FinCopilot</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="#dashboard" class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span>
+      </a></li>
+      <li><a href="#portfolio" class="nav-item" data-section="portfolio">
+        <span class="nav-icon">💼</span><span class="nav-label">Mi Cartera</span>
+      </a></li>
+      <li><a href="#vest-analysis" class="nav-item" data-section="vest-analysis">
+        <span class="nav-icon">🔍</span><span class="nav-label">Análisis Vest</span>
+      </a></li>
+      <li><a href="#copilot" class="nav-item" data-section="copilot">
+        <span class="nav-icon">🤖</span><span class="nav-label">Copiloto IA</span>
+      </a></li>
+      <li><a href="#calculator" class="nav-item" data-section="calculator">
+        <span class="nav-icon">🧮</span><span class="nav-label">Calculadoras</span>
+      </a></li>
+      <li><a href="#education" class="nav-item" data-section="education">
+        <span class="nav-icon">📚</span><span class="nav-label">Educación</span>
+      </a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="user-avatar">DV</div>
+      <div class="user-info">
+        <span class="user-name">Mi Cuenta</span>
+        <span class="user-status">● Activo</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      <div class="topbar-right">
+        <span class="date-badge" id="currentDate"></span>
+        <div class="notification-btn">🔔</div>
+      </div>
+    </header>
+
+    <!-- ======================== SECTION: DASHBOARD ======================== -->
+    <section id="dashboard" class="section active">
+      <div class="welcome-card">
+        <div class="welcome-text">
+          <h2>Bienvenido a tu Copiloto Financiero</h2>
+          <p>Analiza tu broker, gestiona tu cartera y toma decisiones de inversión inteligentes.</p>
+        </div>
+        <div class="welcome-cta">
+          <button class="btn btn-primary" onclick="navigateTo('vest-analysis')">Analizar Vest</button>
+          <button class="btn btn-outline" onclick="navigateTo('portfolio')">Ver Cartera</button>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-card positive">
+          <div class="stat-label">Valor Total Cartera</div>
+          <div class="stat-value" id="totalPortfolioValue">$383.30</div>
+          <div class="stat-change positive">+$1.02 hoy (+0.27%)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Posiciones Abiertas</div>
+          <div class="stat-value">4</div>
+          <div class="stat-change neutral">GOOGL, AAPL, NVDA, TSLA</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Puntuación Vest</div>
+          <div class="stat-value" id="vestScoreDash">—</div>
+          <div class="stat-change neutral">Completa el análisis</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-label">Alertas</div>
+          <div class="stat-value">3</div>
+          <div class="stat-change warning">Revisar antes de operar</div>
+        </div>
+      </div>
+
+      <!-- Portfolio Mini Chart -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Resumen de Posiciones</h3>
+          <span class="badge badge-green">Vest Portfolio</span>
+        </div>
+        <div class="holdings-list">
+          <div class="holding-item">
+            <div class="holding-logo googl">G</div>
+            <div class="holding-info">
+              <span class="holding-name">Alphabet Inc. - Class A</span>
+              <span class="holding-ticker">GOOGL</span>
+            </div>
+            <div class="holding-values">
+              <span class="holding-price">$329.77</span>
+              <span class="holding-change positive">+$0.73 (0.22%)</span>
+            </div>
+          </div>
+          <div class="holding-item">
+            <div class="holding-logo aapl">A</div>
+            <div class="holding-info">
+              <span class="holding-name">Apple, Inc.</span>
+              <span class="holding-ticker">AAPL</span>
+            </div>
+            <div class="holding-values">
+              <span class="holding-price">$0.98</span>
+              <span class="holding-change positive">+$0.00 (0.37%)</span>
+            </div>
+          </div>
+          <div class="holding-item">
+            <div class="holding-logo nvda">N</div>
+            <div class="holding-info">
+              <span class="holding-name">NVIDIA Corporation</span>
+              <span class="holding-ticker">NVDA</span>
+            </div>
+            <div class="holding-values">
+              <span class="holding-price">$21.53</span>
+              <span class="holding-change positive">+$0.25 (1.16%)</span>
+            </div>
+          </div>
+          <div class="holding-item">
+            <div class="holding-logo tsla">T</div>
+            <div class="holding-info">
+              <span class="holding-name">Tesla, Inc.</span>
+              <span class="holding-ticker">TSLA</span>
+            </div>
+            <div class="holding-values">
+              <span class="holding-price">$31.02</span>
+              <span class="holding-change positive">+$0.04 (0.14%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h3 class="card-header-title">Acciones Rápidas</h3>
+        <div class="quick-actions">
+          <button class="action-btn" onclick="navigateTo('vest-analysis')">
+            <span>🔍</span><span>Analizar Broker</span>
+          </button>
+          <button class="action-btn" onclick="navigateTo('calculator')">
+            <span>📊</span><span>Calcular ROI</span>
+          </button>
+          <button class="action-btn" onclick="navigateTo('copilot')">
+            <span>🤖</span><span>Preguntar al Copiloto</span>
+          </button>
+          <button class="action-btn" onclick="navigateTo('education')">
+            <span>📚</span><span>Aprender</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== SECTION: PORTFOLIO ======================== -->
+    <section id="portfolio" class="section">
+      <div class="card">
+        <div class="card-header">
+          <h3>Mi Cartera en Vest</h3>
+          <div class="card-actions">
+            <button class="btn btn-sm btn-outline" onclick="exportPortfolio()">Exportar CSV</button>
+            <button class="btn btn-sm btn-primary" onclick="openAddStockModal()">+ Añadir</button>
+          </div>
+        </div>
+        <div class="portfolio-summary">
+          <div class="portfolio-metric">
+            <span class="metric-label">Valor Total</span>
+            <span class="metric-value">$383.30</span>
+          </div>
+          <div class="portfolio-metric">
+            <span class="metric-label">Ganancia/Pérdida Hoy</span>
+            <span class="metric-value positive">+$1.02</span>
+          </div>
+          <div class="portfolio-metric">
+            <span class="metric-label">Retorno Total</span>
+            <span class="metric-value" id="totalReturn">—</span>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="portfolioTable">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Empresa</th>
+                <th>Precio Actual</th>
+                <th>Cambio Hoy</th>
+                <th>Valor</th>
+                <th>Precio Compra</th>
+                <th>P&amp;L</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="portfolioTableBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Portfolio Notes -->
+      <div class="card">
+        <h3 class="card-header-title">Notas y Estrategia</h3>
+        <textarea class="notes-area" id="portfolioNotes" placeholder="Escribe aquí tus notas de inversión, estrategia, objetivos..."></textarea>
+        <button class="btn btn-primary" onclick="saveNotes()">Guardar Notas</button>
+      </div>
+
+      <!-- Add Stock Modal -->
+      <div class="modal" id="addStockModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Añadir Posición</h3>
+            <button class="modal-close" onclick="closeAddStockModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Ticker</label>
+              <input type="text" id="newTicker" placeholder="Ej: MSFT" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Empresa</label>
+              <input type="text" id="newCompany" placeholder="Ej: Microsoft Corp." class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Precio Compra (USD)</label>
+              <input type="number" id="newBuyPrice" placeholder="0.00" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Cantidad de Acciones</label>
+              <input type="number" id="newShares" placeholder="0" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Precio Actual (USD)</label>
+              <input type="number" id="newCurrentPrice" placeholder="0.00" class="form-input" />
+            </div>
+            <button class="btn btn-primary" style="width:100%" onclick="addStock()">Añadir Posición</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== SECTION: VEST ANALYSIS ======================== -->
+    <section id="vest-analysis" class="section">
+      <div class="analysis-hero">
+        <div class="broker-logo-area">
+          <div class="broker-logo">V</div>
+          <div>
+            <h2>Análisis del Broker <span class="highlight">Vest</span></h2>
+            <p>Evaluación basada en los 6 criterios fundamentales antes de operar</p>
+          </div>
+        </div>
+        <div class="score-circle-container">
+          <div class="score-circle" id="vestScoreCircle">
+            <span class="score-number" id="vestScoreNumber">0/6</span>
+            <span class="score-label">Puntuación</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="vestProgressBar" style="width: 0%"></div>
+      </div>
+      <p class="progress-text" id="vestProgressText">Responde todas las preguntas para obtener tu puntuación</p>
+
+      <!-- Question 1 -->
+      <div class="question-card" id="q1">
+        <div class="question-header">
+          <div class="question-number">1</div>
+          <div class="question-content">
+            <h3>¿Tienes claras TODAS las comisiones de Vest?</h3>
+            <p class="question-desc">Verifica que conoces las comisiones por operación (compra/venta), comisiones del bróker corresponsal para mercados internacionales y comisiones de custodia.</p>
+          </div>
+          <div class="question-status" id="q1-status"></div>
+        </div>
+        <div class="question-details">
+          <div class="checklist">
+            <label class="check-item">
+              <input type="checkbox" id="q1a" onchange="updateVestScore()" />
+              <span>Comisión por compra/venta de acciones documentada</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="q1b" onchange="updateVestScore()" />
+              <span>Comisión del bróker corresponsal (mercados internacionales)</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="q1c" onchange="updateVestScore()" />
+              <span>Comisiones de custodia por mantener acciones</span>
+            </label>
+          </div>
+          <div class="answer-section">
+            <textarea class="notes-area small" id="q1-notes" placeholder="Anota aquí las comisiones que encontraste en Vest..."></textarea>
+          </div>
+          <div class="risk-alert">
+            <span class="alert-icon">⚠️</span>
+            <span>Las comisiones se descuentan directamente de tu plusvalía. Con inversiones pequeñas pueden "comerse" todos tus beneficios.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question-card" id="q2">
+        <div class="question-header">
+          <div class="question-number">2</div>
+          <div class="question-content">
+            <h3>¿Puedes operar directamente en dólares (USD)?</h3>
+            <p class="question-desc">Para invertir en bolsa americana (NASDAQ, Dow Jones), tu cuenta debe permitirte mantener un "pool de inversión" en USD y solo cambiar divisa cuando el tipo de cambio te favorezca.</p>
+          </div>
+          <div class="question-status" id="q2-status"></div>
+        </div>
+        <div class="question-details">
+          <div class="answer-options">
+            <button class="option-btn" id="q2-yes" onclick="selectOption('q2', 'yes')">
+              ✅ Sí, puedo mantener cuenta en USD
+            </button>
+            <button class="option-btn" id="q2-partial" onclick="selectOption('q2', 'partial')">
+              ⚠️ Parcialmente (conversión automática)
+            </button>
+            <button class="option-btn" id="q2-no" onclick="selectOption('q2', 'no')">
+              ❌ No, solo en moneda local
+            </button>
+          </div>
+          <div class="risk-alert">
+            <span class="alert-icon">💱</span>
+            <span>Si Vest convierte automáticamente a tu moneda local en cada transacción, estás perdiendo dinero en cada operación con el tipo de cambio.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question-card" id="q3">
+        <div class="question-header">
+          <div class="question-number">3</div>
+          <div class="question-content">
+            <h3>¿Vest intenta venderte productos estructurados o fondos gestionados?</h3>
+            <p class="question-desc">Un bróker seguro te permite ser dueño de tus decisiones. Desconfía de plataformas que te empujan hacia productos propios o fondos donde otros deciden por ti.</p>
+          </div>
+          <div class="question-status" id="q3-status"></div>
+        </div>
+        <div class="question-details">
+          <div class="checklist">
+            <label class="check-item warning-check">
+              <input type="checkbox" id="q3a" onchange="updateVestScore()" />
+              <span>Vest me empuja activamente a invertir en portafolios "SmartVest" o similares</span>
+            </label>
+            <label class="check-item warning-check">
+              <input type="checkbox" id="q3b" onchange="updateVestScore()" />
+              <span>Me ofrecen "rendimientos garantizados" o "seguros"</span>
+            </label>
+            <label class="check-item warning-check">
+              <input type="checkbox" id="q3c" onchange="updateVestScore()" />
+              <span>No puedo comprar acciones individuales libremente sin que me recomienden productos propios</span>
+            </label>
+          </div>
+          <div class="vest-note info-box">
+            <span class="info-icon">ℹ️</span>
+            <span>Nota: En el screenshot se ve "Invest in Conservative portfolio" de SmartVest. Evalúa si es una sugerencia opcional o si es el flujo principal de inversión.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question-card" id="q4">
+        <div class="question-header">
+          <div class="question-number">4</div>
+          <div class="question-content">
+            <h3>¿Qué información fiscal reporta Vest a las autoridades?</h3>
+            <p class="question-desc">Una plataforma regulada debe reportar tus operaciones a la autoridad fiscal de tu país. Verifica si Vest hace esto automáticamente.</p>
+          </div>
+          <div class="question-status" id="q4-status"></div>
+        </div>
+        <div class="question-details">
+          <div class="checklist">
+            <label class="check-item">
+              <input type="checkbox" id="q4a" onchange="updateVestScore()" />
+              <span>Vest reporta compras, ventas y plusvalías a la autoridad fiscal de mi país</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="q4b" onchange="updateVestScore()" />
+              <span>Tengo acceso a un informe fiscal anual (form 1099 o equivalente)</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="q4c" onchange="updateVestScore()" />
+              <span>Entiendo cómo declarar dividendos y plusvalías de inversiones internacionales en mi país</span>
+            </label>
+          </div>
+          <div class="risk-alert">
+            <span class="alert-icon">🏛️</span>
+            <span>No declarar correctamente tus ganancias de inversión puede resultar en sanciones fiscales. Cobra el dividendo y plusvalía "en bruto" y debes declararlo localmente.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="question-card" id="q5">
+        <div class="question-header">
+          <div class="question-number">5</div>
+          <div class="question-content">
+            <h3>¿Cuáles son tus límites de riesgo operativos?</h3>
+            <p class="question-desc">Un buen bróker establece límites de operativa (diarios, semanales, mensuales) para proteger tu capital. Verifica si estos existen en tu contrato con Vest.</p>
+          </div>
+          <div class="question-status" id="q5-status"></div>
+        </div>
+        <div class="question-details">
+          <div class="checklist">
+            <label class="check-item">
+              <input type="checkbox" id="q5a" onchange="updateVestScore()" />
+              <span>Conozco mi límite diario de operaciones en Vest</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="q5b" onchange="updateVestScore()" />
+              <span>Conozco el monto máximo que puedo invertir semanalmente/mensualmente</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="q5c" onchange="updateVestScore()" />
+              <span>He definido mis propios límites de stop-loss y take-profit</span>
+            </label>
+          </div>
+          <div class="answer-section">
+            <div class="risk-inputs">
+              <div class="form-group">
+                <label>Mi límite de pérdida máxima aceptable (%)</label>
+                <input type="range" min="1" max="50" value="10" class="range-input" id="maxLossRange" oninput="updateRangeDisplay('maxLossRange', 'maxLossDisplay')" />
+                <span class="range-display" id="maxLossDisplay">10%</span>
+              </div>
+              <div class="form-group">
+                <label>Mi objetivo de ganancia anual (%)</label>
+                <input type="range" min="5" max="100" value="20" class="range-input" id="targetReturnRange" oninput="updateRangeDisplay('targetReturnRange', 'targetReturnDisplay')" />
+                <span class="range-display" id="targetReturnDisplay">20%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 6 -->
+      <div class="question-card" id="q6">
+        <div class="question-header">
+          <div class="question-number">6</div>
+          <div class="question-content">
+            <h3>¿Vest te evaluó financieramente (test MiFID o similar)?</h3>
+            <p class="question-desc">Las regulaciones internacionales exigen que las plataformas evalúen tu nivel de conocimientos financieros antes de dejarte operar. ¿Vest lo hizo?</p>
+          </div>
+          <div class="question-status" id="q6-status"></div>
+        </div>
+        <div class="question-details">
+          <div class="answer-options">
+            <button class="option-btn" id="q6-yes" onclick="selectOption('q6', 'yes')">
+              ✅ Sí, completé un test de idoneidad
+            </button>
+            <button class="option-btn" id="q6-partial" onclick="selectOption('q6', 'partial')">
+              ⚠️ Hice un registro básico pero sin evaluación real
+            </button>
+            <button class="option-btn" id="q6-no" onclick="selectOption('q6', 'no')">
+              ❌ No, me dejaron operar sin evaluación
+            </button>
+          </div>
+          <div class="risk-alert">
+            <span class="alert-icon">📋</span>
+            <span>Si un bróker no te evalúa, puede estar ignorando regulaciones importantes. Esto también significa que no tiene información sobre tu perfil de riesgo real.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final Score Card -->
+      <div class="score-card" id="vestScoreCard">
+        <h3>📊 Resultado del Análisis</h3>
+        <div class="score-summary" id="vestScoreSummary">
+          <p>Completa todas las preguntas para ver tu análisis completo.</p>
+        </div>
+        <div class="recommendations" id="vestRecommendations"></div>
+        <button class="btn btn-primary" onclick="downloadReport()">Descargar Informe PDF</button>
+        <button class="btn btn-outline" onclick="shareReport()">Compartir Análisis</button>
+      </div>
+    </section>
+
+    <!-- ======================== SECTION: COPILOT ======================== -->
+    <section id="copilot" class="section">
+      <div class="copilot-container">
+        <div class="copilot-header">
+          <div class="copilot-avatar">🤖</div>
+          <div>
+            <h2>Copiloto Financiero IA</h2>
+            <p>Tu asistente personal para decisiones de inversión inteligentes</p>
+          </div>
+        </div>
+
+        <!-- Suggested Questions -->
+        <div class="suggested-questions">
+          <h4>Preguntas frecuentes</h4>
+          <div class="suggestions-grid">
+            <button class="suggestion-btn" onclick="askCopilot('¿Cuáles son los riesgos de invertir en TSLA ahora mismo?')">
+              ¿Riesgos de TSLA actualmente?
+            </button>
+            <button class="suggestion-btn" onclick="askCopilot('¿Cómo diversifico mejor mi cartera con GOOGL, AAPL, NVDA y TSLA?')">
+              ¿Cómo diversificar mi cartera?
+            </button>
+            <button class="suggestion-btn" onclick="askCopilot('¿Es Vest un broker seguro y regulado para invertir?')">
+              ¿Es Vest un broker seguro?
+            </button>
+            <button class="suggestion-btn" onclick="askCopilot('¿Cuándo debería vender mis acciones de NVDA?')">
+              ¿Cuándo vender NVDA?
+            </button>
+            <button class="suggestion-btn" onclick="askCopilot('¿Cómo declaro mis ganancias de inversión en el extranjero?')">
+              ¿Cómo declarar ganancias fiscalmente?
+            </button>
+            <button class="suggestion-btn" onclick="askCopilot('¿Qué es un stop-loss y cómo lo configuro?')">
+              ¿Qué es un stop-loss?
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+              <div class="message-avatar">🤖</div>
+              <div class="message-bubble">
+                <p>Hola! Soy tu Copiloto Financiero. Puedo ayudarte a analizar tu cartera en Vest, entender comisiones, estrategias de inversión y conceptos financieros.</p>
+                <p>Tu cartera actual tiene posiciones en <strong>GOOGL, AAPL, NVDA y TSLA</strong>. ¿En qué puedo ayudarte hoy?</p>
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-container">
+            <textarea
+              id="chatInput"
+              class="chat-input"
+              placeholder="Escribe tu pregunta financiera aquí..."
+              rows="2"
+              onkeydown="handleChatKeydown(event)"
+            ></textarea>
+            <button class="send-btn" onclick="sendMessage()">
+              <span>➤</span>
+            </button>
+          </div>
+          <p class="chat-disclaimer">⚠️ Este copiloto ofrece información educativa general. No es asesoramiento financiero profesional. Consulta un asesor certificado para decisiones importantes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== SECTION: CALCULATORS ======================== -->
+    <section id="calculator" class="section">
+      <div class="calc-tabs">
+        <button class="calc-tab active" onclick="switchCalc('roi')">ROI / Rendimiento</button>
+        <button class="calc-tab" onclick="switchCalc('compound')">Interés Compuesto</button>
+        <button class="calc-tab" onclick="switchCalc('commissions')">Impacto Comisiones</button>
+        <button class="calc-tab" onclick="switchCalc('currency')">Tipo de Cambio</button>
+      </div>
+
+      <!-- ROI Calculator -->
+      <div class="calc-panel active" id="calc-roi">
+        <div class="card">
+          <h3 class="card-header-title">Calculadora de ROI (Retorno sobre Inversión)</h3>
+          <div class="calc-grid">
+            <div class="form-group">
+              <label>Precio de Compra (USD)</label>
+              <input type="number" id="roi-buy" class="form-input" placeholder="0.00" oninput="calcROI()" />
+            </div>
+            <div class="form-group">
+              <label>Precio de Venta (USD)</label>
+              <input type="number" id="roi-sell" class="form-input" placeholder="0.00" oninput="calcROI()" />
+            </div>
+            <div class="form-group">
+              <label>Número de Acciones</label>
+              <input type="number" id="roi-shares" class="form-input" placeholder="1" oninput="calcROI()" />
+            </div>
+            <div class="form-group">
+              <label>Comisión Total (USD)</label>
+              <input type="number" id="roi-commission" class="form-input" placeholder="0.00" oninput="calcROI()" />
+            </div>
+          </div>
+          <div class="calc-results" id="roi-results"></div>
+        </div>
+      </div>
+
+      <!-- Compound Interest Calculator -->
+      <div class="calc-panel" id="calc-compound">
+        <div class="card">
+          <h3 class="card-header-title">Calculadora de Interés Compuesto</h3>
+          <div class="calc-grid">
+            <div class="form-group">
+              <label>Capital Inicial (USD)</label>
+              <input type="number" id="ci-principal" class="form-input" placeholder="1000" oninput="calcCompound()" />
+            </div>
+            <div class="form-group">
+              <label>Aportación Mensual (USD)</label>
+              <input type="number" id="ci-monthly" class="form-input" placeholder="100" oninput="calcCompound()" />
+            </div>
+            <div class="form-group">
+              <label>Tasa Anual Esperada (%)</label>
+              <input type="number" id="ci-rate" class="form-input" placeholder="10" oninput="calcCompound()" />
+            </div>
+            <div class="form-group">
+              <label>Años de Inversión</label>
+              <input type="number" id="ci-years" class="form-input" placeholder="10" oninput="calcCompound()" />
+            </div>
+          </div>
+          <div class="calc-results" id="compound-results"></div>
+        </div>
+      </div>
+
+      <!-- Commissions Impact -->
+      <div class="calc-panel" id="calc-commissions">
+        <div class="card">
+          <h3 class="card-header-title">Impacto de Comisiones en tu Inversión</h3>
+          <div class="calc-grid">
+            <div class="form-group">
+              <label>Capital Invertido (USD)</label>
+              <input type="number" id="comm-capital" class="form-input" placeholder="1000" oninput="calcCommissions()" />
+            </div>
+            <div class="form-group">
+              <label>Comisión por Operación (USD)</label>
+              <input type="number" id="comm-fee" class="form-input" placeholder="5" oninput="calcCommissions()" />
+            </div>
+            <div class="form-group">
+              <label>Número de Operaciones al Año</label>
+              <input type="number" id="comm-ops" class="form-input" placeholder="12" oninput="calcCommissions()" />
+            </div>
+            <div class="form-group">
+              <label>Rendimiento Esperado Anual (%)</label>
+              <input type="number" id="comm-return" class="form-input" placeholder="15" oninput="calcCommissions()" />
+            </div>
+          </div>
+          <div class="calc-results" id="commissions-results"></div>
+        </div>
+      </div>
+
+      <!-- Currency Calculator -->
+      <div class="calc-panel" id="calc-currency">
+        <div class="card">
+          <h3 class="card-header-title">Calculadora de Tipo de Cambio e Impacto</h3>
+          <div class="calc-grid">
+            <div class="form-group">
+              <label>Monto en USD</label>
+              <input type="number" id="fx-usd" class="form-input" placeholder="1000" oninput="calcCurrency()" />
+            </div>
+            <div class="form-group">
+              <label>Tipo de Cambio Real (USD/Local)</label>
+              <input type="number" id="fx-real" class="form-input" placeholder="1.08" step="0.01" oninput="calcCurrency()" />
+            </div>
+            <div class="form-group">
+              <label>Tipo de Cambio del Broker (USD/Local)</label>
+              <input type="number" id="fx-broker" class="form-input" placeholder="1.05" step="0.01" oninput="calcCurrency()" />
+            </div>
+            <div class="form-group">
+              <label>Número de Operaciones</label>
+              <input type="number" id="fx-ops" class="form-input" placeholder="10" oninput="calcCurrency()" />
+            </div>
+          </div>
+          <div class="calc-results" id="currency-results"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== SECTION: EDUCATION ======================== -->
+    <section id="education" class="section">
+      <div class="card">
+        <h3 class="card-header-title">Centro de Educación Financiera</h3>
+        <div class="education-grid">
+          <div class="edu-card" onclick="openEduModal('mifid')">
+            <div class="edu-icon">📋</div>
+            <h4>Test MiFID</h4>
+            <p>¿Qué es el test de idoneidad MiFID y por qué es obligatorio?</p>
+            <span class="edu-badge">Regulación</span>
+          </div>
+          <div class="edu-card" onclick="openEduModal('diversification')">
+            <div class="edu-icon">🎯</div>
+            <h4>Diversificación</h4>
+            <p>Cómo reducir el riesgo distribuyendo tu inversión</p>
+            <span class="edu-badge">Estrategia</span>
+          </div>
+          <div class="edu-card" onclick="openEduModal('dividends')">
+            <div class="edu-icon">💰</div>
+            <h4>Dividendos</h4>
+            <p>Cómo funcionan los dividendos y su impacto fiscal</p>
+            <span class="edu-badge">Ingresos</span>
+          </div>
+          <div class="edu-card" onclick="openEduModal('stoploss')">
+            <div class="edu-icon">🛑</div>
+            <h4>Stop-Loss</h4>
+            <p>Cómo proteger tu capital con órdenes de stop-loss</p>
+            <span class="edu-badge">Riesgo</span>
+          </div>
+          <div class="edu-card" onclick="openEduModal('taxes')">
+            <div class="edu-icon">🏛️</div>
+            <h4>Fiscalidad</h4>
+            <p>Cómo declarar ganancias de inversión en el extranjero</p>
+            <span class="edu-badge">Fiscal</span>
+          </div>
+          <div class="edu-card" onclick="openEduModal('brokers')">
+            <div class="edu-icon">🏦</div>
+            <h4>Cómo Elegir Broker</h4>
+            <p>Guía completa para seleccionar un broker seguro y regulado</p>
+            <span class="edu-badge">Guía</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education Modal -->
+      <div class="modal" id="eduModal">
+        <div class="modal-content modal-large">
+          <div class="modal-header">
+            <h3 id="eduModalTitle">Título</h3>
+            <button class="modal-close" onclick="closeEduModal()">✕</button>
+          </div>
+          <div class="modal-body" id="eduModalContent"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
